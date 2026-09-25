@@ -237,7 +237,7 @@ function accountCard(a) {
         <div class="block opp"><b>Opportunities</b>${bullets(s.opportunities)}</div>
         <div class="block risk"><b>Challenges</b>${bullets(s.challenges)}</div>
       </div>
-      ${s.backburner && s.backburner.length ? backburner(s.backburner) : ""}
+      ${s.backburner && s.backburner.length ? backburner(s.backburner) : `<div class="backburner"><b>Backburner</b><div class="meta" style="margin-top:6px">No additional material stories identified in this run.</div></div>`}
     </div>
   </div>`;
 }
