@@ -212,7 +212,7 @@ function backburner(items) {
   const latest = [...(items || [])]
     .sort((a,b) => parseDate(b.date) - parseDate(a.date))
     .slice(0,5);
-  return `<div class="backburner"><b>Backburner · latest 5 days · max 5</b><ul>${latest.map(x =>
+  return `<div class="backburner"><b>More Reading · latest 5 days · max 5</b><ul>${latest.map(x =>
     `<li>${link(x.url, x.headline)} · ${esc(x.source)} · ${esc(x.date)}</li>`
   ).join("")}</ul></div>`;
 }
@@ -244,7 +244,7 @@ function accountCard(a) {
         <div class="block opp"><b>Opportunities</b>${bullets(s.opportunities)}</div>
         <div class="block risk"><b>Challenges</b>${bullets(s.challenges)}</div>
       </div>
-      ${s.backburner && s.backburner.length ? backburner(s.backburner) : `<div class="backburner"><b>Backburner</b><div class="meta" style="margin-top:6px">No additional material stories identified in this run.</div></div>`}
+      ${s.backburner && s.backburner.length ? backburner(s.backburner) : `<div class="backburner"><b>More Reading</b><div class="meta" style="margin-top:6px">No additional material stories identified in the last 5 days.</div></div>`}
     </div>
   </div>`;
 }
