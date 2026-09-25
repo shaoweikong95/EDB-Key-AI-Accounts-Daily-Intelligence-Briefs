@@ -205,7 +205,14 @@ function storyCard(s, n) {
   </div>`;
 }
 function backburner(items) {
-  return `<div class="backburner"><b>Backburner</b><ul>${items.map(x =>
+  const parseDate = (s) => {
+    const t = Date.parse(s);
+    return Number.isFinite(t) ? t : 0;
+  };
+  const latest = [...(items || [])]
+    .sort((a,b) => parseDate(b.date) - parseDate(a.date))
+    .slice(0,5);
+  return `<div class="backburner"><b>Backburner · latest 5 days · max 5</b><ul>${latest.map(x =>
     `<li>${link(x.url, x.headline)} · ${esc(x.source)} · ${esc(x.date)}</li>`
   ).join("")}</ul></div>`;
 }
