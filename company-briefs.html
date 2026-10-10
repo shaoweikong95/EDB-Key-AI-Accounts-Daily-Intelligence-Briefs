@@ -21,13 +21,13 @@ footer{font-size:12px;margin-top:12px;color:#222}.small{font-size:12px}
 <footer>Word files retain the original six-section brief structure, with black text. Unverified financial or engagement details are left blank. If the preview asks you to sign in, open the file using the Google account with access.</footer>
 </main><script>
 const docs={
-"anthropic":["Anthropic","1HSN_pdxV_ZDZYdsmwDbk7KeygFUr4xGi"],
-"elevenlabs":["ElevenLabs","1URuUYlYSC21PqXMeWaFM_oZxWjTH3c5k"],
-"ami-labs":["AMI Labs","1G87MI9svC9_aF4Vy8v5Q1RvZ-6-axnqw"],
-"prometheus":["Prometheus","1IVqDWDoxR7gJVep-V6ri7awqoB0PSbuE"],
-"manus-ai":["Manus AI","17fjQFImVYRaP0B_XJN9Xt3usBewWA3QA"],
-"datadog":["Datadog","13-7FudLKsjlrxspQOVuFHwcMNa9P8v1g"],
-"cognition-ai":["Cognition AI","1UtBIscyl2ejLo1lfTkwcxu1QT9JNamcp"]};
+"anthropic":["Anthropic","12zTvu-65PJR2Dn_-o9WU1Bem8imFXi_K"],
+"elevenlabs":["ElevenLabs","11IL7Rew8qUv3GBP9DEbmK7Bc3aHrs4dX"],
+"ami-labs":["AMI Labs","1-1mRzoX2HunEebvvD5V4JcGHzsoHb9-6"],
+"prometheus":["Prometheus","1Kj2WUX6n9sx7Avbj1JZnOsHG10NUipd6"],
+"manus-ai":["Manus AI","1BlycdrGDBxpm3s8iMLg73RBf3rwmd-5z"],
+"datadog":["Datadog","1u9qwCY2imcqcWYsUWdNI1Z5so9C-vLSy"],
+"cognition-ai":["Cognition AI","1pZdFP83t_jsZDyB2HIF5PeyFCBCVbx7d"]};
 const key=new URLSearchParams(location.search).get("account"),doc=docs[key];
 if(doc){document.title=doc[0]+" — Company Brief";document.getElementById("title").textContent=doc[0]+" — Company Brief";
 document.getElementById("preview").src="https://drive.google.com/file/d/"+doc[1]+"/preview";
