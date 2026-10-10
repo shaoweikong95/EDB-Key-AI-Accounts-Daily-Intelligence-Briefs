@@ -1,7 +1,7 @@
 name: Verify daily intelligence publication
 on:
   schedule:
-    - cron: '45 21 * * *' # 05:45 Singapore time
+    - cron: '00 23 * * *' # 07:00 Singapore time, after recovery attempts
   workflow_dispatch:
 permissions:
   contents: read
