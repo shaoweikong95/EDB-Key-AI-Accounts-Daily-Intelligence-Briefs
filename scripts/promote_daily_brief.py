@@ -67,6 +67,23 @@ def inspect(src, expected):
                     raise ValueError(name + ": invalid More Reading link")
     return sum(not v["f"] for v in current.values()), sum(bool(v["m"]) for v in current.values())
 
+def verify_live(content, expected):
+    # Exact-byte equality prevents false success from a changed date alone.
+    for attempt in range(12):
+        try:
+            url = SITE + "/data/latest.js?verify=" + str(int(time.time()))
+            request = urllib.request.Request(url, headers={"Cache-Control": "no-cache", "User-Agent": "DailyAIIntegrityCheck/1.0"})
+            with urllib.request.urlopen(request, timeout=25) as response:
+                live = response.read().decode("utf-8")
+            inspect(live, expected)
+            if live == content:
+                print("VERIFIED: production Cloudflare site serves the exact current brief:", expected)
+                return True
+        except Exception as exc:
+            print("Deployment verification pending:", exc)
+        time.sleep(15)
+    return False
+
 def main():
     today = dt.datetime.now(ZoneInfo("Asia/Singapore")).date()
     expected = f"{today.day} {today.strftime('%b %Y')}"
@@ -75,8 +92,18 @@ def main():
     baseline = git("show", "origin/main:data/latest.js").stdout
     try:
         fresh, reading = inspect(baseline, expected)
-        print(f"Production already current: {expected}, {fresh} fresh-account leads, {reading} accounts with More Reading")
-        return
+        print(f"GitHub already current: {expected}, {fresh} fresh-account leads, {reading} accounts with More Reading")
+        if verify_live(baseline, expected):
+            return
+        # Force a fresh Cloudflare deployment without replacing correct content.
+        git("checkout", "-B", "main", "origin/main")
+        git("config", "user.name", "daily-brief-publisher[bot]")
+        git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
+        git("commit", "--allow-empty", "-m", f"Retry Cloudflare publication for {expected}")
+        git("push", "origin", "HEAD:main")
+        if verify_live(baseline, expected):
+            return
+        raise RuntimeError("Cloudflare remains stale despite a fresh deployment trigger")
     except ValueError as exc:
         print("Production needs refreshing:", exc)
     branches = git("branch", "-r", "--list", f"origin/daily-brief-{iso}*").stdout.splitlines()
@@ -116,19 +143,8 @@ def main():
             raise RuntimeError("Could not publish after three attempts")
         time.sleep(3)
     # Never treat a commit alone as live verification.
-    for attempt in range(12):
-        try:
-            url = SITE + "/data/latest.js?verify=" + str(int(time.time()))
-            request = urllib.request.Request(url, headers={"Cache-Control": "no-cache", "User-Agent": "DailyAIIntegrityCheck/1.0"})
-            with urllib.request.urlopen(request, timeout=25) as response:
-                live = response.read().decode("utf-8")
-            inspect(live, expected)
-            if live == content:
-                print("VERIFIED: production Cloudflare site serves the exact current brief:", expected)
-                return
-        except Exception as exc:
-            print("Deployment verification pending:", exc)
-        time.sleep(15)
+    if verify_live(content, expected):
+        return
     raise RuntimeError("GitHub was updated but Cloudflare did not serve matching content within verification window")
 
 if __name__ == "__main__":
