@@ -3,6 +3,7 @@ name: Auto-publish completed daily intelligence
 on:
   push:
     branches:
+      - main
       - 'daily-brief-*-complete'
   schedule:
     - cron: '55 21 * * *' # 05:55 Singapore time
