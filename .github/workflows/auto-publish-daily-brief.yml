@@ -1,0 +1,31 @@
+name: Auto-publish completed daily intelligence
+
+on:
+  push:
+    branches:
+      - 'daily-brief-*-complete'
+  schedule:
+    - cron: '55 21 * * *' # 05:55 Singapore time
+    - cron: '30 22 * * *' # 06:30 Singapore recovery
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-ai-intelligence-production
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout production source and recovery branches
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Validate and publish complete current brief
+        run: python3 scripts/promote_daily_brief.py
