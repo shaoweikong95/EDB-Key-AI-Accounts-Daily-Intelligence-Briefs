@@ -117,5 +117,20 @@
     "ats": "ashby",
     "slug": "periodic-labs",
     "entity": "Periodic Labs"
+  },
+  {
+    "account": "ServiceNow",
+    "ats": "smartrecruiters",
+    "slug": "ServiceNow"
+  },
+  {
+    "account": "Sakana AI",
+    "ats": "sakana",
+    "slug": "core"
+  },
+  {
+    "account": "Sakana AI",
+    "ats": "sakana",
+    "slug": "applied"
   }
 ]
