@@ -57,7 +57,7 @@ def live_html(url):
         return response.read().decode("utf-8","replace")
 
 def sakana(slug):
-    """Official Sakana AI positions; each individual role is a canonical posting."""
+    """Enumerate Sakana AI's live official careers and Applied Workable links."""
     if slug not in ("core","applied"):raise ValueError("Unknown Sakana board")
     board="https://sakana.ai/careers/" if slug=="core" else "https://sakana.ai/applied-careers/"
     parser=ListingLinks();parser.feed(live_html(board))
@@ -66,16 +66,33 @@ def sakana(slug):
     for href,title in parser.links:
         absolute=urljoin(board,href)
         parsed=urlparse(absolute)
-        if parsed.hostname not in ("sakana.ai","www.sakana.ai"):continue
         if slug=="core":
-            if not parsed.path.startswith("/careers/") or parsed.path=="/careers/":continue
+            if parsed.hostname not in ("sakana.ai","www.sakana.ai") or not parsed.path.startswith("/careers/") or parsed.path=="/careers/":
+                continue
+            location=["Tokyo, Japan"]  # current live site explicitly labels all core openings Tokyo
         else:
-            # Applied Team job pages linked from the team's dedicated careers page
-            if not (parsed.path.startswith("/careers/") and parsed.path!="/careers/"):continue
+            # Sakana Applied Team's official page directly embeds the current Workable job links
+            if parsed.hostname!="apply.workable.com" or not parsed.path.startswith("/sakana-ai/j/"):
+                continue
+            # No Singapore inference from the Japan-only landing page; keep precise
+            # location metadata from the current first-party Workable posting where possible.
+            location=[]
+            try:
+                page=live_html(absolute)
+                for c in ("Singapore","Japan","Tokyo","Osaka","Remote, Japan"):
+                    if re.search(r"(?<![A-Za-z])"+re.escape(c)+r"(?![A-Za-z])",page,re.I):
+                        # Generic page copy can mention multiple countries, so do not
+                        # infer Singapore from non-location body text.
+                        if c!="Singapore":location=[c]
+                if re.search(r'"addressCountry"\s*:\s*"SG"',page):
+                    location=["Singapore"]
+            except Exception:
+                location=[] # still retain live posting with an unresolved location
         if not title or len(title)>150:title=parsed.path.strip("/").split("/")[-1].replace("-"," ").title()
+        title=re.sub(r"\\s*→\\s*$","",title).strip()
         key=parsed.path.rstrip("/")
-        listings.append((key,absolute,title,["Tokyo, Japan"]))
+        listings.append((key,absolute,title,location))
     ids={x[0] for x in listings}
-    if not listings:raise ValueError("No first-party Sakana role links found; page layout may have changed. Example hrefs="+repr(parser.links[-18:]))
+    if not listings:raise ValueError("No first-party Sakana role links found; sample="+repr(parser.links[-12:]))
     if len(ids)!=len(listings):listings=list({x[0]:x for x in listings}.values())
     return board,listings
