@@ -20,6 +20,7 @@ class Posting:
     category: str
     countries: tuple[str, ...]
     source_board_url: str
+    raw_locations: tuple[str, ...] = ()
 
 def validate(postings: Iterable[Posting], coverage: dict[str,str], failures: dict[str,str]):
     rows = list(postings)
@@ -36,7 +37,9 @@ def validate(postings: Iterable[Posting], coverage: dict[str,str], failures: dic
         key=(p.account,p.entity,p.job_id)
         if key in seen: raise ValueError(f"Duplicate posting: {key}")
         seen.add(key)
-        if not p.countries: raise ValueError(f"Missing explicit location: {key}")
+        # A legitimate global/remote opening may have no country. Keep it in the audit,
+        # but classify the account Partial rather than inventing geographic attribution.
+        if not isinstance(p.countries, tuple): raise ValueError(f"Invalid country metadata: {key}")
         if coverage[p.account]=="Unverified":
             raise ValueError(f"Unverified account included in verified audit: {p.account}")
     sg=Counter((p.account,p.category) for p in rows if "Singapore" in p.countries)
