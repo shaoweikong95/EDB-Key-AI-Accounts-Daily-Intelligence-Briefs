@@ -140,7 +140,8 @@ def collect_one(config):
 def main():
     config=json.loads(Path(sys.argv[1]).read_text())
     names=[c["account"] for c in config]
-    if len(names)!=len(set(names)): raise ValueError("Duplicate account config")
+    unique_boards=[(c["account"],c.get("entity",c["account"]),c["ats"],c["slug"]) for c in config]
+    if len(unique_boards)!=len(set(unique_boards)): raise ValueError("Duplicate entity/ATS/board config")
     result=[]; diagnostics={}; coverage={}; verified=set()
     for account in audit.ACCOUNTS:
         configs=[c for c in config if c["account"]==account]
