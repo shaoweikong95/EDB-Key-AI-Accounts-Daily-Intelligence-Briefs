@@ -53,6 +53,20 @@ jobs:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           GMAIL_SENDER: shaoweikong@gmail.com
         run: python weekly-hiring/verify_and_email.py
+      - name: Refresh separate incomplete preview if production is blocked
+        if: failure()
+        run: |
+          if [ -f weekly-hiring-output/audit.json ]; then
+            python weekly-hiring/render_preview.py weekly-hiring-output weekly-hiring-preview/index.html
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add weekly-hiring-preview/index.html
+            if ! git diff --cached --quiet; then
+              git commit -m "Refresh incomplete hiring extraction preview"
+              git pull --rebase origin main
+              git push origin HEAD:main
+            fi
+          fi
       - name: Preserve audit, validation and failure diagnostics
         if: always()
         uses: actions/upload-artifact@v4
