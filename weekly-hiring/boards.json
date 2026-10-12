@@ -111,5 +111,11 @@
     "ats": "ashby",
     "slug": "cursor",
     "entity": "Cursor"
+  },
+  {
+    "account": "Periodic AI",
+    "ats": "ashby",
+    "slug": "periodic-labs",
+    "entity": "Periodic Labs"
   }
 ]
