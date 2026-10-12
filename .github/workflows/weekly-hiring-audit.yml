@@ -27,6 +27,21 @@ jobs:
           python-version: '3.12'
       - name: Compile all pipeline components
         run: python -m compileall -q weekly-hiring
+      - name: Check downstream credential availability without exposing values
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: |
+          if [ -n "$GOOGLE_SERVICE_ACCOUNT_JSON" ]; then
+            echo "GOOGLE_SHEETS_CREDENTIALS=CONFIGURED"
+          else
+            echo "GOOGLE_SHEETS_CREDENTIALS=MISSING"
+          fi
+          if [ -n "$GMAIL_APP_PASSWORD" ]; then
+            echo "GMAIL_DELIVERY_CREDENTIALS=CONFIGURED"
+          else
+            echo "GMAIL_DELIVERY_CREDENTIALS=MISSING"
+          fi
       - name: Test canonical audit integrity
         run: python -m unittest discover -s weekly-hiring -p 'test_*.py'
       - name: Collect first-party ATS jobs and validate
