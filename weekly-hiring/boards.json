@@ -1,1 +1,115 @@
-[]
+[
+  {
+    "account": "OpenAI",
+    "ats": "ashby",
+    "slug": "openai"
+  },
+  {
+    "account": "Databricks",
+    "ats": "greenhouse",
+    "slug": "databricks"
+  },
+  {
+    "account": "AvePoint",
+    "ats": "greenhouse",
+    "slug": "avepoint"
+  },
+  {
+    "account": "Decart",
+    "ats": "ashby",
+    "slug": "decart-ai"
+  },
+  {
+    "account": "SandboxAQ",
+    "ats": "ashby",
+    "slug": "sandboxaq"
+  },
+  {
+    "account": "Workato",
+    "ats": "greenhouse",
+    "slug": "workato"
+  },
+  {
+    "account": "Cohere",
+    "ats": "ashby",
+    "slug": "cohere"
+  },
+  {
+    "account": "BeyondMath",
+    "ats": "ashby",
+    "slug": "beyondmath"
+  },
+  {
+    "account": "Mistral AI",
+    "ats": "ashby",
+    "slug": "mistral.ai"
+  },
+  {
+    "account": "Deepgram",
+    "ats": "ashby",
+    "slug": "deepgram"
+  },
+  {
+    "account": "Enigma",
+    "ats": "greenhouse",
+    "slug": "enigmaio"
+  },
+  {
+    "account": "Luma AI",
+    "ats": "ashby",
+    "slug": "lumaai"
+  },
+  {
+    "account": "Thinking Machines Lab",
+    "ats": "ashby",
+    "slug": "thinkingmachines"
+  },
+  {
+    "account": "Anthropic (Claude)",
+    "ats": "greenhouse",
+    "slug": "anthropic"
+  },
+  {
+    "account": "ElevenLabs",
+    "ats": "ashby",
+    "slug": "elevenlabs"
+  },
+  {
+    "account": "AMI Labs (Advanced Machine Intelligence)",
+    "ats": "ashby",
+    "slug": "ami"
+  },
+  {
+    "account": "Manus AI",
+    "ats": "ashby",
+    "slug": "manusai"
+  },
+  {
+    "account": "Datadog",
+    "ats": "greenhouse",
+    "slug": "datadog"
+  },
+  {
+    "account": "Cognition AI (Devin, Windsurf)",
+    "ats": "ashby",
+    "slug": "cognition"
+  },
+  {
+    "account": "SpaceX",
+    "ats": "greenhouse",
+    "slug": "spacex",
+    "entity": "SpaceX"
+  },
+  {
+    "account": "SpaceX",
+    "ats": "greenhouse",
+    "slug": "xai",
+    "entity": "xAI"
+  },
+  {
+    "account": "SpaceX",
+    "ats": "ashby",
+    "slug": "cursor",
+    "entity": "Cursor"
+  }
+]
