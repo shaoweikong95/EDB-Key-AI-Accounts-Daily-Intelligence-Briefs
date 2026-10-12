@@ -45,18 +45,18 @@ def locations(value):
     if isinstance(value,list): raw=" | ".join(str(x) for x in value if x)
     else: raw=str(value or "")
     geography={
-        "Singapore":["Singapore"],
-        "United States":["United States","USA","U.S.A.","US Remote","USA - Remote",
+        "Singapore":["Singapore","SG (country)"],
+        "United States":["United States","USA","U.S.A.","US Remote","US - Remote","USA - Remote",
             "United States - Remote","San Francisco","New York","Seattle",
             "California","Austin","Denver","Chicago","Boston","Palo Alto","Mountain View",
-            "Redwood City","Los Angeles","Memphis","Hawthorne","Starbase","Cape Canaveral",
+            "Redwood City","Los Angeles","Memphis","Hawthorne","Starbase","Cape Canaveral","Bastrop","Woodinville","Washington, DC","Washington, D.C.","Washington D.C.","Remote UT","Remote TX","Remote WA","Nevada","Virginia","Maryland",
             "Redmond","Washington DC","Dallas","Miami","Atlanta","Ann Arbor","Portland",
             "Philadelphia","Salt Lake City","Bellevue","Sunnyvale","Southaven"],
         "United Kingdom":["United Kingdom","UK","London","Cambridge, UK","Manchester","Oxford"],
         "Japan":["Japan","Tokyo","Osaka"],
         "France":["France","Paris","Lyon"],
         "Germany":["Germany","Berlin","Munich","Frankfurt","Hamburg"],
-        "Canada":["Canada","Toronto","Montreal","Vancouver","Ontario, CAN","British Columbia"],
+        "Canada":["Canada","Toronto","Montreal","Montréal","Vancouver","Ontario, CAN","British Columbia"],
         "India":["India","Bangalore","Bengaluru","Hyderabad","Mumbai","Gurgaon","Pune","Delhi"],
         "Australia":["Australia","Sydney","Melbourne","Brisbane"],
         "China":["China","Beijing","Shanghai","Shenzhen","Guangzhou"],
@@ -66,6 +66,7 @@ def locations(value):
         "Philippines":["Philippines","Manila","Makati","Cebu","Alabang"],
         "Netherlands":["Netherlands","Amsterdam"],
         "Switzerland":["Switzerland","Zurich"],
+        "Luxembourg":["Luxembourg"],"Qatar":["Qatar","Doha"],"Chile":["Chile"],"Colombia":["Colombia"],"Greece":["Greece"],
         "Sweden":["Sweden","Stockholm"],
         "Ireland":["Ireland","Dublin"],
         "Spain":["Spain","Madrid","Barcelona"],
@@ -126,6 +127,12 @@ def collect_one(config):
         jobs=[j for j in data["jobs"] if j.get("isListed",True)]
         mapped=[(str(j["id"]),j["jobUrl"],j["title"],
                  [j.get("location","")]+[x.get("location","") for x in j.get("secondaryLocations",[])]) for j in jobs]
+    elif kind=="smartrecruiters":
+        from first_party import smartrecruiters
+        board,mapped=smartrecruiters(slug)
+    elif kind=="sakana":
+        from first_party import sakana
+        board,mapped=sakana(slug)
     else: raise ValueError("Unsupported ATS")
     if len({j[0] for j in mapped})!=len(mapped): raise ValueError("Duplicate IDs from ATS")
     postings=[]
