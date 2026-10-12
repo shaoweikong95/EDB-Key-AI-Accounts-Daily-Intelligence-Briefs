@@ -165,6 +165,8 @@ def main():
     payload={"as_of_utc":timestamp,"coverage":coverage,"diagnostics":diagnostics,
              "postings":[vars(p) for p in result]}
     (out/"audit.json").write_text(json.dumps(payload,indent=2))
+    for account in audit.ACCOUNTS:
+        print("COVERAGE",account,coverage[account],json.dumps(diagnostics[account]),flush=True)
     try:
         # Every unverified account has diagnostics; no fabricated zero.
         summary=audit.gate(result,coverage,{a:str(diagnostics[a]) for a in audit.ACCOUNTS if coverage[a]=="Unverified"},verified)
