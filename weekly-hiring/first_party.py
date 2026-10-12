@@ -71,11 +71,11 @@ def sakana(slug):
             if not parsed.path.startswith("/careers/") or parsed.path=="/careers/":continue
         else:
             # Applied Team job pages linked from the team's dedicated careers page
-            if not (parsed.path.startswith("/applied-careers/") and parsed.path!="/applied-careers/"):continue
+            if not (parsed.path.startswith("/careers/") and parsed.path!="/careers/"):continue
         if not title or len(title)>150:title=parsed.path.strip("/").split("/")[-1].replace("-"," ").title()
         key=parsed.path.rstrip("/")
         listings.append((key,absolute,title,["Tokyo, Japan"]))
     ids={x[0] for x in listings}
-    if not listings:raise ValueError("No first-party Sakana role links found; page layout may have changed. Example hrefs="+repr(parser.links[:12]))
+    if not listings:raise ValueError("No first-party Sakana role links found; page layout may have changed. Example hrefs="+repr(parser.links[-18:]))
     if len(ids)!=len(listings):listings=list({x[0]:x for x in listings}.values())
     return board,listings
