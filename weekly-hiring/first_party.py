@@ -76,6 +76,6 @@ def sakana(slug):
         key=parsed.path.rstrip("/")
         listings.append((key,absolute,title,["Tokyo, Japan"]))
     ids={x[0] for x in listings}
-    if not listings:raise ValueError("No first-party Sakana role links found; page layout may have changed")
+    if not listings:raise ValueError("No first-party Sakana role links found; page layout may have changed. Example hrefs="+repr(parser.links[:12]))
     if len(ids)!=len(listings):listings=list({x[0]:x for x in listings}.values())
     return board,listings
